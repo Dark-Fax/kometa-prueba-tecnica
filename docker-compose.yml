@@ -1,0 +1,48 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: moodle_db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root123
+      MARIADB_USER: bn_moodle
+      MARIADB_PASSWORD: moodle123
+      MARIADB_DATABASE: bitnami_moodle
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  moodle:
+    image: bitnamilegacy/moodle:4.4
+    container_name: moodle_app
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      MOODLE_DATABASE_TYPE: mariadb
+      MOODLE_DATABASE_HOST: mariadb
+      MOODLE_DATABASE_PORT_NUMBER: 3306
+      MOODLE_DATABASE_USER: bn_moodle
+      MOODLE_DATABASE_PASSWORD: moodle123
+      MOODLE_DATABASE_NAME: bitnami_moodle
+      MOODLE_USERNAME: admin
+      MOODLE_PASSWORD: Admin123!
+      MOODLE_EMAIL: admin@kometa.local
+      MOODLE_SITE_NAME: "Kometa Test Site"
+      MOODLE_ENABLE_HTTPS: "no"
+    volumes:
+      - moodle_data:/bitnami/moodle
+      - moodle_data_config:/bitnami/moodledata
+
+volumes:
+  mariadb_data:
+  moodle_data:
+  moodle_data_config:
