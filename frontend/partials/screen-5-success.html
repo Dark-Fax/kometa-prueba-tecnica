@@ -1,0 +1,40 @@
+<div class="flex-1 flex flex-col px-8 py-12 gap-6">
+
+    <div
+        class="card p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-emerald-50/60 border-emerald-200">
+        <div>
+            <h2 class="serif text-2xl font-semibold flex items-center gap-2" style="color:var(--primary)">
+                ✓ ¡Publicación Exitosa!
+            </h2>
+            <p class="text-sm text-[var(--secondary)] mt-1 max-w-2xl">
+                Tu curso ya está disponible en Moodle. Puedes acceder directamente para ver la versión final o continuar
+                refinando el contenido a través del asistente de IA.
+            </p>
+        </div>
+        <a :href="`http://localhost:8080/course/view.php?id=${moodleCourseId}`" 
+            target="_blank" 
+            class="btn-primary shrink-0 flex items-center gap-2 shadow-xs hover:opacity-90 transition cursor-pointer">
+            ↗ Ver en Moodle    
+        </a>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-6 flex-1">
+
+        <div class="card p-6 w-full lg:w-80 shrink-0 self-start">
+            <h3 class="serif text-xl font-semibold mb-3" x-text="courseData?.course_name"></h3>
+            <p class="text-xs font-semibold tracking-wide text-[var(--neutral)] mb-4">ESTRUCTURA DEL CURSO</p>
+            <ul class="space-y-2">
+                <template x-for="(module, index) in courseData?.modules || []" :key="index">
+                    <li class="flex items-center gap-2 text-sm">
+                        <span style="color:var(--primary)">☑</span>
+                        <span x-text="'Módulo ' + (index + 1) + ': ' + module.title"></span>
+                    </li>
+                </template>
+            </ul>
+        </div>
+
+        <div id="chat-container" class="flex-1 flex flex-col"></div>
+
+    </div>
+
+</div>

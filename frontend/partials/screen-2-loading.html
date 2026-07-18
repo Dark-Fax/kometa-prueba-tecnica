@@ -1,0 +1,25 @@
+<div class="flex-1 flex flex-col items-center justify-center px-8 py-12 text-center" x-data="{
+    labels: ['Analizando instrucción...', 'Generando módulos...', 'Estructurando lecciones...'],
+    currentLabel: 0,
+    labelInterval: null
+}" x-init="
+    labelInterval = setInterval(() => { currentLabel = (currentLabel + 1) % labels.length }, 3500);
+    $watch('stage', () => { if (stage !== 'loading') clearInterval(labelInterval) })
+">
+
+    <h1 class="serif text-4xl font-semibold mb-4 max-w-2xl" style="color:var(--secondary)">
+        Nuestra IA está estructurando tu conocimiento...
+    </h1>
+    <p class="text-[var(--neutral)] max-w-lg mb-12">
+        Analizando patrones pedagógicos y creando una narrativa cohesiva para tu curso.
+    </p>
+
+    <div class="w-full max-w-xs">
+        <p class="text-xs font-semibold tracking-wide text-[var(--neutral)] mb-3"
+            x-text="labels[currentLabel].toUpperCase()"></p>
+        <div class="progress-indeterminate"></div>
+    </div>
+
+    <p x-show="errorMessage" x-text="errorMessage" class="text-red-600 text-sm mt-6"></p>
+
+</div>

@@ -1,0 +1,62 @@
+<div class="card p-6 flex-1 flex flex-col" x-data="{ questionInput: '' }">
+
+    <div class="flex items-center gap-3 pb-4 border-b border-[var(--line)] mb-4">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white"
+            style="background:var(--primary)">
+            🤖
+        </div>
+        <div>
+            <p class="serif font-semibold" style="color:var(--secondary)">Asistente Kometa</p>
+            <p class="text-xs text-[var(--neutral)]">Haz una pregunta sobre el contenido del curso</p>
+        </div>
+    </div>
+
+    <div class="flex-1 overflow-y-auto space-y-4 mb-4">
+
+        <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
+                style="background:var(--primary)">🤖</div>
+            <div class="card p-4 text-sm max-w-lg" style="background:var(--paper)">
+                ¡Hola! Tu curso "<span x-text="courseData?.course_name"></span>" ya está en vivo. Pregúntame lo que
+                quieras sobre su contenido.
+            </div>
+        </div>
+
+        <template x-for="(msg, index) in chatMessages" :key="index">
+            <div>
+                <div class="flex items-start gap-3 mb-3 justify-end">
+                    <div class="card p-4 text-sm max-w-lg" style="background:var(--secondary); color:white"
+                        x-text="msg.question"></div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
+                        style="background:var(--primary)">🤖</div>
+                    <div class="card p-4 text-sm max-w-lg" style="background:var(--paper)" x-text="msg.answer"></div>
+                </div>
+            </div>
+        </template>
+
+    </div>
+
+    <div class="flex gap-2 flex-wrap mb-4">
+        <button @click="sendChatMessage('¿Cuál es el objetivo general del curso?')"
+            class="badge hover:opacity-80">Objetivo del curso</button>
+        <button @click="sendChatMessage('Genera un quiz para el Módulo 1')" class="badge hover:opacity-80">Generar quiz
+            Módulo 1</button>
+        <button @click="sendChatMessage('Resume la bibliografía')" class="badge hover:opacity-80">Resumir
+            bibliografía</button>
+    </div>
+
+    <div class="flex gap-2 pt-4 border-t border-[var(--line)]">
+        <input type="text" x-model="questionInput" @keydown.enter="sendChatMessage(questionInput); questionInput = ''"
+            placeholder="Escribe tu consulta aquí..."
+            class="flex-1 border border-[var(--line)] rounded-lg px-4 py-2 text-sm outline-none">
+        <button @click="sendChatMessage(questionInput); questionInput = ''" class="btn-primary px-4">
+            ➤
+        </button>
+    </div>
+
+    <p class="text-xs text-[var(--neutral)] text-center mt-2">Kometa puede cometer errores. Verifica el contenido
+        generado.</p>
+
+</div>

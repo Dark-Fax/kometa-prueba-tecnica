@@ -1,0 +1,100 @@
+:root {
+    --primary: #064E3B;
+    --secondary: #0F172A;
+    --tertiary: #64748B;
+    --neutral: #757875;
+    --paper: #F7F7F5;
+    --line: #E5E5E2;
+}
+
+body {
+    background: var(--paper);
+    color: var(--secondary);
+    font-family: 'Inter', sans-serif;
+}
+
+.serif {
+    font-family: 'Source Serif 4', serif;
+}
+
+.step-tab {
+    color: var(--neutral);
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.step-tab.active {
+    color: var(--secondary);
+    border-color: var(--primary);
+    font-weight: 500;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: opacity 0.15s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--secondary);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+}
+
+.badge {
+    background: var(--line);
+    color: var(--secondary);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.progress-indeterminate {
+    position: relative;
+    height: 4px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-indeterminate::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 40%;
+    background: var(--primary);
+    border-radius: 999px;
+    animation: slide 1.4s ease-in-out infinite;
+}
+
+@keyframes slide {
+    0% {
+        left: -40%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
