@@ -19,7 +19,7 @@ const polling = {
                 if (data.status === 'completed') {
                     this.stop();
                     onComplete(data.course_data);
-                } else if (data.status === 'failed') {
+                } else if (data.status === 'error') {
                     this.stop();
                     onError('La IA no pudo generar el curso. Intenta con otra instrucción.');
                 }
