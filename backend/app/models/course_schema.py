@@ -5,6 +5,7 @@ class ModuleContent(BaseModel):
     title: str = Field(description="Título del módulo")
     description: str = Field(description="Descripción breve del módulo")
     content: str = Field(description="Contenido explicativo extenso del módulo (300-500 palabras)")
+    exercises: List[str] = Field(default_factory=list, description="Lista de 2-3 ejercicios prácticos del módulo")
 
 class CourseStructure(BaseModel):
     course_name: str = Field(description="Nombre completo del curso")

@@ -14,6 +14,7 @@ class TaskResponse(BaseModel):
 
 class ChatRequest(BaseModel):
     question: str
+    history: list = []
 
 class ChatResponse(BaseModel):
     answer: str

@@ -57,6 +57,9 @@ def generate_course_structure(instruction: str) -> CourseStructure:
                         "content": (
                             "Eres un diseñador instruccional experto para la plataforma Kometa. "
                             "Tu tarea es generar estructuras de cursos altamente coherentes y organizadas en ESPAÑOL. "
+                            "Cuando el contenido del módulo lo amerite, usa formato markdown dentro del campo 'content': "
+                            "## para subtítulos, listas con '-', bloques de código con ``` para ejemplos de código, "
+                            "y tablas markdown (| col | col |) cuando compares datos. No uses LaTeX ni símbolos matemáticos especiales."
                             "Debes responder EXCLUSIVAMENTE con un objeto JSON válido. "
                             "Es mandatorio que las llaves (keys) del JSON estén estrictamente en INGLÉS y coincidan con este molde:\n\n"
                             "{\n"
@@ -92,12 +95,12 @@ def generate_course_structure(instruction: str) -> CourseStructure:
 
         except APIStatusError as status_err:
             # Intercepción específica para códigos de sobrecarga de cuotas (Rate Limits)
-            if status_err.status_code == 429:
-                if attempt < max_retries - 1:
-                    sleep_time = retry_delay * (attempt + 1)
-                    logger.warning(f"Error 429 (Rate Limit) detectado en Groq. Reintentando en {sleep_time}s... (Intento {attempt + 1}/{max_retries})")
-                    time.sleep(sleep_time)
-                    continue
+            is_retryable = status_err.status_code == 429 or "json_validate_failed" in str(status_err)
+            if is_retryable and attempt < max_retries - 1:
+                sleep_time = retry_delay * (attempt + 1)
+                logger.warning(f"Error reintentable en Groq ({status_err.status_code}). Reintentando en {sleep_time}s... (Intento {attempt + 1}/{max_retries})")
+                time.sleep(sleep_time)
+                continue
             logger.error(f"Error de estado HTTP reportado por Groq (Código {status_err.status_code}): {status_err.message}")
             raise status_err
             

@@ -34,6 +34,7 @@ def init_db():
             fullname TEXT NOT NULL,
             shortname TEXT NOT NULL,
             course_summary TEXT,
+            cover_image BLOB,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (task_id) REFERENCES tasks(id)
         )

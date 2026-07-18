@@ -14,6 +14,15 @@ async def prueba_conexion():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error conectando a Moodle: {str(e)}")
     
+@router.get("/health")
+async def health():
+    try:
+        await moodle_client.get_site_info()
+        return {"connected": True}
+    except Exception:
+        return {"connected": False}
+    
+
 @router.post("/prueba_crear_curso")
 async def prueba_crear_curso():
     try: 
@@ -88,3 +97,4 @@ async def limpiar_cursos_prueba():
         return {"deleted": len(ids_to_delete), "ids": ids_to_delete, "result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    

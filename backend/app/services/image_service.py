@@ -44,3 +44,20 @@ async def generate_module_image(module_title: str, module_description: str, file
             f.write(response.content)
 
     return filepath
+
+async def generate_course_cover(course_name: str, course_summary: str) -> str:
+    """Genera una portada única para el curso completo (distinta de las imágenes por módulo)."""
+    specific_element = build_image_prompt(course_name, course_summary)
+    raw_prompt = (
+        f"A bold minimalist book cover illustration representing {specific_element}. "
+        "Flat vector style, vibrant single accent color, clean composition, no text, no words"
+    )
+    encoded_prompt = quote(raw_prompt)
+    url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=500&height=350&nologo=true&model=flux"
+    filepath = os.path.join(OUTPUT_DIR, "cover.png")
+    async with httpx.AsyncClient(timeout=60) as client:
+        response = await client.get(url)
+        response.raise_for_status()
+        with open(filepath, "wb") as f:
+            f.write(response.content)
+    return filepath
