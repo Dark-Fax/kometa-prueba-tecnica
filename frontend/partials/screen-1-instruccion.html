@@ -4,20 +4,25 @@
         <p class="text-xs font-semibold tracking-wide text-[var(--neutral)] mb-1">CURSOS RECIENTES</p>
         <p class="text-xs text-[var(--neutral)] mb-6">Continúa donde lo dejaste</p>
         <div class="space-y-3">
-            <div class="card overflow-hidden">
-                <div
-                    class="h-24 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/5 flex items-center justify-center">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
-                        stroke-width="1.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
-                    </svg>
+            <template x-if="recentCourses.length === 0">
+                <p class="text-xs text-[var(--neutral)]">Aún no has publicado cursos.</p>
+            </template>
+            <template x-for="course in recentCourses" :key="course.id">
+                <div class="card overflow-hidden relative group">
+                    <img :src="course.cover_base64 ? 'data:image/jpeg;base64,' + course.cover_base64 : ''"
+                        class="h-24 w-full object-cover bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/5"
+                        x-show="course.cover_base64">
+                    <button @click.stop="deleteRecentCourse(course.id)"
+                        class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 text-red-600 text-xs opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        ✕
+                    </button>
+                    <div class="p-3">
+                        <p class="text-sm font-medium" x-text="course.fullname"></p>
+                        <p class="text-xs text-[var(--neutral)] mt-0.5"
+                            x-text="course.module_count + ' módulos · publicado'"></p>
+                    </div>
                 </div>
-                <div class="p-3">
-                    <p class="text-sm font-medium">Introducción a Python</p>
-                    <p class="text-xs text-[var(--neutral)] mt-0.5">6 módulos · publicado</p>
-                </div>
-            </div>
+            </template>
         </div>
         <button @click="reset()"
             class="mt-auto text-sm text-[var(--primary)] font-medium flex items-center gap-1.5 pt-6">

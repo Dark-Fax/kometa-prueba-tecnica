@@ -8,9 +8,30 @@ function kometaApp() {
         moodleCourseId: null,
         chatMessages: [],
         errorMessage: "",
+        isEditing: false,
+        recentCourses: [],
 
         init() {
+            this.loadRecentCourses();
             this.goTo("idle");
+        },
+
+        async loadRecentCourses() {
+            try {
+                this.recentCourses = await api.listCourses();
+            } catch (err) {
+                this.recentCourses = [];
+            }
+        },
+
+        async deleteRecentCourse(courseDbId) {
+            if (!confirm('¿Eliminar este curso de Moodle y del historial? Esta acción no se puede deshacer.')) return;
+            try {
+                await api.deleteCourse(courseDbId);
+                this.recentCourses = this.recentCourses.filter(c => c.id !== courseDbId);
+            } catch (err) {
+                this.errorMessage = 'No se pudo eliminar el curso.';
+            }
         },
 
         async loadScreen(name, targetId = "screens-container") {
@@ -79,16 +100,17 @@ function kometaApp() {
         },
 
         async confirmPublish() {
-            this.errorMessage = "";
-            this.goTo("publishing");
+            this.errorMessage = '';
+            this.isEditing = false;
+            this.goTo('publishing');
             try {
-                const { moodle_course_id } = await api.confirmCourse(this.taskId);
+                const { moodle_course_id } = await api.confirmCourse(this.taskId, this.courseData);
                 this.moodleCourseId = moodle_course_id;
-                this.goTo("success");
+                this.loadRecentCourses();
+                this.goTo('success');
             } catch (err) {
-                this.errorMessage =
-                    "Falló la publicación en Moodle. Puedes reintentar.";
-                this.goTo("preview");
+                this.errorMessage = 'Falló la publicación en Moodle. Puedes reintentar.';
+                this.goTo('preview');
             }
         },
 
@@ -96,10 +118,14 @@ function kometaApp() {
             this.goTo("idle");
         },
 
+        toggleEditMode() {
+            this.isEditing = !this.isEditing;
+        },
+
         async sendChatMessage(question) {
             if (!question.trim()) return;
             try {
-                const { answer } = await api.sendChat(this.taskId, question);
+                const { answer } = await api.sendChat(this.taskId, question, this.chatMessages);
                 this.chatMessages.push({ question, answer });
             } catch (err) {
                 this.chatMessages.push({

@@ -7,14 +7,13 @@
                 ✓ ¡Publicación Exitosa!
             </h2>
             <p class="text-sm text-[var(--secondary)] mt-1 max-w-2xl">
-                Tu curso ya está disponible en Moodle. Puedes acceder directamente para ver la versión final o continuar
-                refinando el contenido a través del asistente de IA.
+                Tu curso ya está disponible en Moodle, con todo su contenido: texto, PDF, imágenes y podcast. Ábrelo
+                para ver la versión final.
             </p>
         </div>
-        <a :href="`http://localhost:8080/course/view.php?id=${moodleCourseId}`" 
-            target="_blank" 
-            class="btn-primary shrink-0 flex items-center gap-2 shadow-xs hover:opacity-90 transition cursor-pointer">
-            ↗ Ver en Moodle    
+        <a :href="`http://localhost:8080/course/view.php?id=${moodleCourseId}`" target="_blank"
+            class="btn-primary shrink-0 flex items-center gap-2">
+            ↗ Abrir Curso en Moodle
         </a>
     </div>
 
