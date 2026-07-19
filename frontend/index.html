@@ -48,6 +48,12 @@
                 ◐</div>
         </nav>
 
+        <!-- Banner de alerta si se pierde la conexión con Moodle -->
+        <div x-show="!moodleConnected" x-transition
+            class="bg-red-50 border-b border-red-200 text-red-700 text-sm text-center py-2">
+            ⚠ Sin conexión con Moodle. Verifica que el servicio esté activo.
+        </div>
+
         <!-- Contenedor Dinámico Principal -->
         <div class="flex-1 flex">
             <!-- 
@@ -61,20 +67,39 @@
         <footer
             class="flex items-center justify-between px-8 py-3 border-t border-[var(--line)] text-xs text-[var(--neutral)]">
             <span class="flex items-center gap-1.5">
-                Conectado a Moodle LMS
-                <span class="w-1.5 h-1.5 rounded-full" style="background:var(--primary)"></span>
+                <span x-text="moodleConnected ? 'Conectado a Moodle LMS' : 'Sin conexión a Moodle'"></span>
+                <span class="w-1.5 h-1.5 rounded-full" :class="moodleConnected ? 'bg-green-500' : 'bg-red-500'"></span>
             </span>
-            <!-- Muestra de manera reactiva los primeros 8 caracteres del UUID de la tarea asíncrona de Celery/FastAPI -->
             <span x-text="taskId ? ('task_id: ' + taskId.slice(0, 8)) : ''"></span>
         </footer>
+
+        <!-- Modal de confirmación para eliminar curso -->
+        <div x-show="courseToDelete" x-transition
+            class="fixed inset-0 bg-black/40 flex items-center justify-center z-50" style="display:none">
+            <div class="card p-6 w-full max-w-sm mx-4" @click.outside="cancelDeleteCourse()">
+                <h3 class="serif text-lg font-semibold mb-2" style="color:var(--secondary)">¿Eliminar este curso?</h3>
+                <p class="text-sm text-[var(--neutral)] mb-6">
+                    Se eliminará <span class="font-medium" x-text="courseToDelete?.fullname"></span> de Moodle y del
+                    historial. Esta acción no se puede deshacer.
+                </p>
+                <div class="flex justify-end gap-3">
+                    <button @click="cancelDeleteCourse()" class="btn-secondary">Cancelar</button>
+                    <button @click="deleteRecentCourse()"
+                        class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-semibold hover:opacity-90 transition">
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
 
     </div>
 
     <!-- 
     ORDEN DE CARGA ESTRICTO: 
-    1. Capa de Red (Fetch wrappers)
-    2. Mecanismo de Polling (Escucha de eventos de fondo)
-    3. Controlador principal del frontend (Instancia e inicializa kometaApp())
+    1. Renderizador de markdown (usado por app.js al pintar contenido)
+    2. Capa de Red (Fetch wrappers)
+    3. Mecanismo de Polling (Escucha de eventos de fondo)
+    4. Controlador principal del frontend (Instancia e inicializa kometaApp())
     -->
     <script src="js/markdown.js"></script>
     <script src="js/api.js"></script>

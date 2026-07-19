@@ -17,6 +17,7 @@ from app.services.audio_service import generate_module_audio
 from app.models.course_schema import CourseStructure
 
 
+
 def create_generation_task(instruction: str) -> str:
     task_id = str(uuid.uuid4())
     conn = get_connection()

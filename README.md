@@ -194,3 +194,7 @@ Tanto el contenido de los módulos como las respuestas del chat vienen formatead
 - **Regeneración individual de una pieza de multimedia** (ej. "no me gustó el audio del módulo 3, genera otro"): lo identifiqué como una mejora valiosa, pero requiere separar la generación de multimedia de la publicación en Moodle en dos pasos distintos — un cambio de arquitectura que no aborde por el riesgo de romper el flujo ya validado a pocas horas de la entrega.
 - **Video interactivo:** extra no implementado por prioridad de tiempo.
 - **Instalación de plugins de terceros en Moodle** (`local_wsmanagesections`, formatos de curso alternativos): los investigué como posible solución a la limitación de secciones, y los descarté por riesgo de tiempo — ver la sección de limitaciones arriba.
+
+---
+
+<sub>© 2026 Andrés Felipe Murcia Fuentes. Repositorio compartido con fines de evaluación técnica del proceso de selección de Kometa. No se autoriza su uso, copia o distribución fuera de ese contexto sin autorización expresa del autor. Ver [LICENSE](./LICENSE).</sub>

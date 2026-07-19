@@ -1,0 +1,9 @@
+backend/venv/
+backend/.env
+backend/tasks.db
+backend/tasks.db-wal
+backend/tasks.db-shm
+backend/generated_files/
+__pycache__/
+*.pyc
+.vscode/

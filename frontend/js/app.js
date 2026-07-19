@@ -10,10 +10,24 @@ function kometaApp() {
         errorMessage: "",
         isEditing: false,
         recentCourses: [],
+        courseToDelete: null,
+        moodleConnected: false,
 
         init() {
             this.loadRecentCourses();
+            this.checkMoodleConnection();
+            setInterval(() => this.checkMoodleConnection(), 30000);
             this.goTo("idle");
+        },
+
+        async checkMoodleConnection() {
+            try {
+                const res = await fetch(`${API_BASE}/moodle/health`);
+                const data = await res.json();
+                this.moodleConnected = data.connected === true;
+            } catch (err) {
+                this.moodleConnected = false;
+            }
         },
 
         async loadRecentCourses() {
@@ -24,14 +38,24 @@ function kometaApp() {
             }
         },
 
-        async deleteRecentCourse(courseDbId) {
-            if (!confirm('¿Eliminar este curso de Moodle y del historial? Esta acción no se puede deshacer.')) return;
+        confirmDeleteCourse(course) {
+            this.courseToDelete = course;
+        },
+
+        cancelDeleteCourse() {
+            this.courseToDelete = null;
+        },
+
+        async deleteRecentCourse() {
+            if (!this.courseToDelete) return;
+            const courseDbId = this.courseToDelete.id;
             try {
                 await api.deleteCourse(courseDbId);
                 this.recentCourses = this.recentCourses.filter(c => c.id !== courseDbId);
             } catch (err) {
                 this.errorMessage = 'No se pudo eliminar el curso.';
             }
+            this.courseToDelete = null;
         },
 
         async loadScreen(name, targetId = "screens-container") {
